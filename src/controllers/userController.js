@@ -2,14 +2,19 @@ require("dotenv").config();
 const userSchema = require("../models/userSchema");
 const generateToken = require("../utils/generateToken");
 const userValidation = require('../utils/validateUser');
-
+const isUserExists = require('../utils/isUserExists');
 const saveOneUser = async (req, res) => {
   try {
     const {error, value} = userValidation.validate(req.body);
     if(error){
       return res.status(400).json({message:error.details[0].message});
     }
+
     const { fullName, emailId, phoneNumber,gender,dateOfBirth,password } = req.body;
+    const existingUser = await isUserExists(emailId,phoneNumber);
+    if(existingUser){
+      return res.status(400).json({message:"User already exists"});
+    }
     console.log(" ------------>>>> ", req.body);
     const newUser = {
       fullName,
