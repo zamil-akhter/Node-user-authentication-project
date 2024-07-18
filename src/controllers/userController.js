@@ -11,10 +11,12 @@ const saveOneUser = async (req, res) => {
     }
 
     const { fullName, emailId, phoneNumber,gender,dateOfBirth,password } = req.body;
+
     const existingUser = await isUserExists(emailId,phoneNumber);
     if(existingUser){
       return res.status(400).json({message:"User already exists"});
     }
+    
     console.log(" ------------>>>> ", req.body);
     const newUser = {
       fullName,
