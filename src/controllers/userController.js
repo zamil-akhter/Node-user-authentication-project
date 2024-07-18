@@ -1,20 +1,10 @@
 require("dotenv").config();
 const userSchema = require("../models/userSchema");
 const generateToken = require("../utils/generateToken");
-const joi = require('joi');
-
-const userValidation = joi.object({
-  fullName: joi.string().required(),
-  emailId : joi.string().email().required(),
-  phoneNumber : joi.number().min(10).required(),
-  gender : joi.string().valid('male','female','other').required(),
-  dateOfBirth : joi.date().required(),
-  password : joi.string().min(6).required()
-})
+const userValidation = require('../utils/validateUser');
 
 const saveOneUser = async (req, res) => {
   try {
-
     const {error, value} = userValidation.validate(req.body);
     if(error){
       return res.status(400).json({message:error.details[0].message});
