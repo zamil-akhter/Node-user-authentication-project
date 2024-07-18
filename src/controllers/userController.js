@@ -4,9 +4,8 @@ const generateToken = require("../utils/generateToken");
 
 const saveOneUser = async (req, res) => {
   try {
-    console.log("hhhhh");
     const { fullName, emailId, phoneNumber,gender,dateOfBirth,password } = req.body;
-    console.log("hhhh", req.body);
+    console.log(" ------------>>>> ", req.body);
     const newUser = {
       fullName,
       emailId, 
@@ -15,7 +14,6 @@ const saveOneUser = async (req, res) => {
       dateOfBirth,
       password
     };
-    console.log("hhhh", req.body);
     const insertedUser = await userSchema.create(newUser);
     const payload = {
       _id: insertedUser._id,
