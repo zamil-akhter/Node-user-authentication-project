@@ -19,8 +19,8 @@ const userSchema = new mongoose.Schema({
     },
     gender : {
         type : String,
-        values : ["Male", "Female", "Other"],
-        default : 'Other'
+        values : ["male", "female", "other"],
+        default : 'other'
     },
     dateOfBirth : {
         type : Date,
