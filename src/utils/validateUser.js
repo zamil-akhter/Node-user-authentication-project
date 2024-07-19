@@ -9,4 +9,6 @@ const userValidation = joi.object({
   password : joi.string().min(6).required()
 });
 
-module.exports = userValidation;
+module.exports ={
+  userValidation
+}
