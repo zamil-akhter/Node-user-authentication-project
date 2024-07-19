@@ -1,4 +1,5 @@
 require('dotenv').config();
+
 const jwt = require('jsonwebtoken');
 const generateToken = async(payload) => {
     try {
@@ -9,4 +10,5 @@ const generateToken = async(payload) => {
         throw error;
     }
 };
+
 module.exports = generateToken;

@@ -14,10 +14,6 @@ const validate_request = (validation_data) => {
   };
 };
 
-route.post(
-  "/saveuser",
-  validate_request(validaion.userValidation),
-  userController.saveOneUser
-);
+route.post("/saveuser", validate_request(validaion.userValidation), userController.saveOneUser);
 
 module.exports = route;

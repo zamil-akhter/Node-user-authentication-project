@@ -2,9 +2,10 @@ require("dotenv").config();
 const userSchema = require("../models/userSchema");
 const generateToken = require("../utils/generateToken");
 const isUserExists = require('../utils/isUserExists');
+
 const saveOneUser = async (req, res) => {
   try {
-
+    
     const { fullName, emailId, phoneNumber,gender,dateOfBirth,password } = req.body;
 
     const existingUser = await isUserExists(emailId,phoneNumber);
@@ -38,6 +39,7 @@ const saveOneUser = async (req, res) => {
     res.status(400).json({ message: "Error while inserting user" });
   }
 };
+
 module.exports = {
   saveOneUser,
 };
