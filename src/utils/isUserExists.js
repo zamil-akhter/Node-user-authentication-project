@@ -7,4 +7,14 @@ const isUserExists = async (newEmailId, newPhoneNumber) => {
   return existingUser;
 };
 
-module.exports = isUserExists;
+const isUserMailExists = async (newEmailId) => {
+  const existingUser = await userSchema.findOne(
+    {emailId : newEmailId}
+  )
+  return existingUser;
+}
+
+module.exports = {
+  isUserExists,
+  isUserMailExists
+};
