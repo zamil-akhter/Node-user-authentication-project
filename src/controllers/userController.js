@@ -41,6 +41,15 @@ const saveOneUser = async (req, res) => {
   }
 };
 
+
+const loginUser = (req,res) => {
+  const {emailId, password} = req.body;
+  
+
+}
+
+
 module.exports = {
   saveOneUser,
+  loginUser
 };
