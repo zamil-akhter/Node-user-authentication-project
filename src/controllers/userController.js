@@ -2,6 +2,7 @@ require("dotenv").config();
 const userSchema = require("../models/userSchema");
 const generateToken = require("../utils/generateToken");
 const isUserExists = require('../utils/isUserExists');
+const userQuery = require('../queries/userQuery');
 
 const saveOneUser = async (req, res) => {
   try {
@@ -23,7 +24,7 @@ const saveOneUser = async (req, res) => {
       dateOfBirth,
       password
     };
-    const insertedUser = await userSchema.create(newUser);
+    const insertedUser = await userQuery.createOneUser(newUser);
     const payload = {
       _id: insertedUser._id,
     };
