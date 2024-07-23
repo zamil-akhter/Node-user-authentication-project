@@ -1,30 +1,18 @@
 require("dotenv").config();
 const userSchema = require("../models/userSchema");
 const generateToken = require("../utils/generateToken");
-const isUserExists = require("../utils/isUserExists");
+const commonController = require("./commonController");
 const userQuery = require("../queries/userQuery");
+const sendStatus = require("../utils/responseHandler");
 
 const saveOneUser = async (req, res) => {
   try {
-    const { fullName, emailId, phoneNumber, gender, dateOfBirth, password } =
-      req.body;
-
-    const existingUser = await isUserExists.isUserExists(emailId, phoneNumber);
+    const existingUser = await commonController.isUserExists(req.body.emailId,req.body.phoneNumber);
     console.log("existingUser--------", existingUser);
     if (existingUser) {
       return res.status(400).json({ message: "User already exists" });
     }
-
-    console.log(" ------------>>>> ", req.body);
-    const newUser = {
-      fullName,
-      emailId,
-      phoneNumber,
-      gender,
-      dateOfBirth,
-      password,
-    };
-    const insertedUser = await userQuery.createOneUser(newUser);
+    const insertedUser = await userQuery.createOneUser(req.body);
     const payload = {
       _id: insertedUser._id,
     };
@@ -45,14 +33,16 @@ const saveOneUser = async (req, res) => {
 const loginUser = async (req, res) => {
   try {
     const { emailId, password } = req.body;
-    const existingUser = await isUserExists.isUserMailExists(emailId);
+    const existingUser = await commonController.isUserMailExists(emailId);
     console.log(existingUser);
     if (!existingUser) {
-      return res.status(400).json({'message':'Invalid email Id'})
+      // return res.status(400).json({'message':'Invalid email Id'});
+      sendStatus(res,400,'Invalid email');
     }
 
     if(password != existingUser.password){
-      return res.status(400).json({'message':'Password is incorrect'})
+      // return res.status(400).json({'message':'Password is incorrect'});
+      sendStatus(res,400, 'Incorrect Password');
     }
 
     let payload = {
@@ -65,7 +55,8 @@ const loginUser = async (req, res) => {
       {access_token : token}
     )
 
-    return res.status(200).json({token,'message':'Login Successfull'})
+    // return res.status(200).json({token,'message':'Login Successfull'})
+    sendStatus(res, 200, 'Login Successfull');
   } 
   catch (error) {
     console.log("Error", error);
