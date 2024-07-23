@@ -1,6 +1,5 @@
 const createOneUser = async (model, data) => {
   try {
-    
     const insertedUser = await model.create(data);
     return insertedUser;
 

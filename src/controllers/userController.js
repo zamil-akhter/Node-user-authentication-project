@@ -8,11 +8,11 @@ const sendStatus = require("../utils/responseHandler");
 const saveOneUser = async (req, res) => {
   try {
     const existingUser = await commonController.isUserExists(req.body.emailId,req.body.phoneNumber);
-    console.log("existingUser--------", existingUser);
+    // console.log("existingUser--------", existingUser);
     if (existingUser) {
       return res.status(400).json({ message: "User already exists" });
     }
-    const insertedUser = await userQuery.createOneUser(req.body);
+    const insertedUser = await userQuery.createOneUser(userSchema, req.body);
     const payload = {
       _id: insertedUser._id,
     };
@@ -23,6 +23,7 @@ const saveOneUser = async (req, res) => {
       { _id: insertedUser._id },
       { access_token: token }
     );
+
     res.status(200).json(update);
   } catch (error) {
     console.log("eee", error.message);
