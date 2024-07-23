@@ -1,7 +1,7 @@
 const express = require("express");
 const joi = require("joi");
 const userController = require("../controllers/userController");
-const validaion = require("../utils/validateUser");
+const validaion = require("../validation/userValidation");
 const route = express.Router();
 
 const validate_request = (validation_data) => {

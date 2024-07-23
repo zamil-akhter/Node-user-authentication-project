@@ -1,6 +1,5 @@
-require("dotenv").config();
 const userSchema = require("../models/userSchema");
-const generateToken = require("../utils/generateToken");
+const generateToken = require("../token_manager/generateToken");
 const commonController = require("./commonController");
 const userQuery = require("../queries/userQuery");
 const sendStatus = require("../utils/responseHandler");

@@ -1,7 +1,7 @@
 const express = require('express');
 const route = express.Router();
 const productController = require('../controllers/productController');
-const productValidation = require('../validation/productValidate');
+const productValidation = require('../validation/productValidation');
 
 
 const validateProduct = (validation_data) => {
