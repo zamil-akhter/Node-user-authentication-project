@@ -9,6 +9,10 @@ const productSchema = new mongoose.Schema({
     type : String,
     default : null,
   },
+  userId : {
+    type : mongoose.Schema.Types.ObjectId,
+    required: true
+  }
 },{timestamps : true});
 
 const Product = mongoose.model('Product',productSchema);

@@ -21,7 +21,8 @@ const saveOneUser = async (req, res) => {
 
     let update = await userSchema.findOneAndUpdate(
       { _id: insertedUser._id },
-      { access_token: token }
+      { access_token: token },
+      { new:true}
     );
 
     res.status(200).json(update);
