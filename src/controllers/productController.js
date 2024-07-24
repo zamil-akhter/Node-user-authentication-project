@@ -28,6 +28,9 @@ const createProduct = async (req, res) => {
 const listProduct = async (req, res) => {
   try {
     console.log(req.user._id);
+    let list = await productQuery.displaySpecificProduct(productSchema, req.user._id);
+    console.log('list --------------------->>>>', list);
+    res.status(200).json({list})
   } catch (error) {
     throw error;
   }

@@ -1,5 +1,5 @@
 const userSchema = require("../models/userSchema");
-const productSchema = require('../models/productSchema');
+const productSchema = require("../models/productSchema");
 
 const isUserExists = async (newemail, newPhoneNumber) => {
   try {
@@ -17,18 +17,20 @@ const isUserMailExists = async (newemail) => {
     const existingUser = await userSchema.findOne({ email: newemail });
     return existingUser;
   } catch (error) {
-    throw error
+    throw error;
   }
 };
 
-const isProductExists = async(newProductName) => {
+const isProductExists = async (newProductName) => {
   try {
-    const existingProductName = await productSchema.findOne({productName:newProductName});
+    const existingProductName = await productSchema.findOne({
+      productName: newProductName,
+    });
     return existingProductName;
   } catch (error) {
     throw error;
   }
-}
+};
 
 module.exports = {
   isUserExists,

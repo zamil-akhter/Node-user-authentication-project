@@ -1,20 +1,22 @@
 const createOneProduct = async(model,data) => {
     try {
-        const newProduct = model.create(data);
+        const newProduct = await model.create(data);
         return newProduct;        
     } catch (error) {
         throw error;
     }
 }
 
-const displaySpecificProduct = async(model,data) => {
+const displaySpecificProduct = async(model,id) => {
     try {
-        model.productName.find({ phoneNumber: "1234567890" }, { name: 1, _id: 0 })
-
+        console.log("**********",model);
+        let list = await model.find({ userId: id });
+        return list;
     } catch (error) {
-        
+        throw error        
     }
 }
 module.exports = {
-    createOneProduct
+    createOneProduct,
+    displaySpecificProduct
 }

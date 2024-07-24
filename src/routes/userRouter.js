@@ -1,9 +1,10 @@
 const express = require("express");
 const userController = require("../controllers/userController");
 const userValidation = require("../validation/userValidation");
-const productController = require('../controllers/productController');
-const auth = require('../auth/auth');
+const productController = require("../controllers/productController");
+const auth = require("../auth/auth");
 const route = express.Router();
+const productSchema = require("../models/productSchema");
 
 const validate_request = (validation_data) => {
   return (req, res, next) => {
@@ -14,13 +15,60 @@ const validate_request = (validation_data) => {
     next();
   };
 };
+const productNameExistance = () => {
+  return async (req, res, next) => {
+    let newProductName = req.body.productName.toLowerCase();
 
+    let oldProductName = await displaySpecificProduct(
+      productSchema,
+      newProductName
+    );
+    // if(oldProductName){
+    //   throw err
+    // }
+    if (oldProductName != null) {
+      let oldPName = oldProductName.productName.toLowerCase();
+      console.log("-------old--------->", oldPName);
+      console.log("-------new--------->", newProductName);
 
-route.post("/signup", validate_request(userValidation.userValidation), userController.signup);
-route.post('/login', validate_request(userValidation.loginValidation), userController.login);
+      if (newProductName === oldPName) {
+        return res.status(400).json({ message: "Product Name already exists" });
+      }
+    }
 
-route.post('/save',auth.validateUser, validate_request(userValidation.productValidation), productController.createProduct);
-route.get('/list', auth.validateUser, productController.listProduct)
+    next();
+  };
+};
 
+const displaySpecificProduct = async (model, pName) => {
+  try {
+    let list = await model.findOne({
+      productName: { $regex: new RegExp(`^${pName}$`, "i") },
+    });
+    return list;
+  } catch (error) {
+    throw error;
+  }
+};
+
+route.post(
+  "/signup",
+  validate_request(userValidation.userValidation),
+  userController.signup
+);
+route.post(
+  "/login",
+  validate_request(userValidation.loginValidation),
+  userController.login
+);
+
+route.post(
+  "/save",
+  auth.validateUser,
+  productNameExistance(),
+  validate_request(userValidation.productValidation),
+  productController.createProduct
+);
+route.get("/list", auth.validateUser, productController.listProduct);
 
 module.exports = route;
