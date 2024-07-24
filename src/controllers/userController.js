@@ -4,7 +4,7 @@ const commonController = require("./commonController");
 const userQuery = require("../queries/userQuery");
 const sendStatus = require("../utils/responseHandler");
 
-const saveOneUser = async (req, res) => {
+const signup = async (req, res) => {
   try {
     const existingUser = await commonController.isUserExists(req.body.emailId,req.body.phoneNumber);
     // console.log("existingUser--------", existingUser);
@@ -31,32 +31,27 @@ const saveOneUser = async (req, res) => {
   }
 };
 
-const loginUser = async (req, res) => {
+const login = async (req, res) => {
   try {
     const { emailId, password } = req.body;
     const existingUser = await commonController.isUserMailExists(emailId);
     console.log(existingUser);
     if (!existingUser) {
-      // return res.status(400).json({'message':'Invalid email Id'});
-      sendStatus(res,400,'Invalid email');
+      return sendStatus(res,400,'Invalid email');
     }
 
     if(password != existingUser.password){
-      // return res.status(400).json({'message':'Password is incorrect'});
-      sendStatus(res,400, 'Incorrect Password');
+      return sendStatus(res,400, 'Incorrect Password');
     }
 
     let payload = {
       _id : existingUser._id,
     }
-
     let token = await generateToken(payload);
     let update = await userSchema.findOneAndUpdate(
       {_id : existingUser._id},
       {access_token : token}
     )
-
-    // return res.status(200).json({token,'message':'Login Successfull'})
     sendStatus(res, 200, 'Login Successfull');
   } 
   catch (error) {
@@ -67,6 +62,6 @@ const loginUser = async (req, res) => {
 };
 
 module.exports = {
-  saveOneUser,
-  loginUser,
+  signup,
+  login,
 };

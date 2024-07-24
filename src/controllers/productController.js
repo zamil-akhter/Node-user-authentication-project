@@ -4,14 +4,15 @@ const commonController = require('../controllers/commonController');
 
 const createProduct = async(req,res) => {
     try {
-        console.log(req.user);
+        // console.log(req.user);
 
         const existingProductName = await commonController.isProductExists(req.body.productName);
+        console.log(existingProductName);
         if(existingProductName){
             return res.status(400).json({"message":"Product name already Exists"});
         }
         const newProduct = await productQuery.createOneProduct(productSchema, req.body);
-        res.status(200).json({newProduct,"message":"Product Created Successfully"});
+        res.status(200).json({newProduct});
     } catch (error) {
         throw error;
     }

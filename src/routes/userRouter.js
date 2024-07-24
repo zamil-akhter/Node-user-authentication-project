@@ -1,9 +1,7 @@
 const express = require("express");
 const userController = require("../controllers/userController");
 const userValidation = require("../validation/userValidation");
-
 const productController = require('../controllers/productController');
-
 const route = express.Router();
 
 const validate_request = (validation_data) => {
@@ -17,8 +15,8 @@ const validate_request = (validation_data) => {
 };
 
 
-route.post("/signup", validate_request(userValidation.userValidation), userController.saveOneUser);
-route.post('/login', validate_request(userValidation.loginValidation),userController.loginUser);
+route.post("/signup", validate_request(userValidation.userValidation), userController.signup);
+route.post('/login', validate_request(userValidation.loginValidation), userController.login);
 
 route.post('/save',validate_request(userValidation.productValidation), productController.createProduct);
 
