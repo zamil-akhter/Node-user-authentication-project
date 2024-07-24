@@ -1,20 +1,26 @@
-const joi = require('joi');
+const Joi = require('joi');
 
-const userValidation = joi.object({
-  fullName: joi.string().required(),
-  emailId : joi.string().email().required(),
-  phoneNumber : joi.number().min(10).required(),
-  gender : joi.string().valid('male','female','other').required(),
-  dateOfBirth : joi.date().required(),
-  password : joi.string().min(6).required()
+const userValidation = Joi.object({
+  fullName: Joi.string().required(),
+  emailId : Joi.string().email().required(),
+  phoneNumber : Joi.number().min(10).required(),
+  gender : Joi.string().valid('male','female','other').required(),
+  dateOfBirth : Joi.date().required(),
+  password : Joi.string().min(6).required()
 });
 
-const loginValidation = joi.object({
-  emailId : joi.string().email().required(),
-  password : joi.string().min(6).required(),
+const loginValidation = Joi.object({
+  emailId : Joi.string().email().required(),
+  password : Joi.string().min(6).required(),
+})
+
+const productValidation = Joi.object({
+  productName : Joi.string().required(),
+  productImage : Joi.string().required()
 })
 
 module.exports = {
   userValidation,
-  loginValidation
+  loginValidation,
+  productValidation
 }

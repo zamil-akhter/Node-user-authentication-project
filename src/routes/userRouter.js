@@ -1,7 +1,9 @@
 const express = require("express");
-const joi = require("joi");
 const userController = require("../controllers/userController");
-const validaion = require("../validation/userValidation");
+const userValidation = require("../validation/userValidation");
+
+const productController = require('../controllers/productController');
+
 const route = express.Router();
 
 const validate_request = (validation_data) => {
@@ -14,8 +16,10 @@ const validate_request = (validation_data) => {
   };
 };
 
-route.post("/saveuser", validate_request(validaion.userValidation), userController.saveOneUser);
 
-route.post('/loginuser', validate_request(validaion.loginValidation),userController.loginUser);
+route.post("/signup", validate_request(userValidation.userValidation), userController.saveOneUser);
+route.post('/login', validate_request(userValidation.loginValidation),userController.loginUser);
+
+route.post('/save',validate_request(userValidation.productValidation), productController.createProduct);
 
 module.exports = route;

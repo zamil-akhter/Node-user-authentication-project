@@ -1,7 +1,6 @@
 require('dotenv').config();
 const databaseConnection = require('./databaseConnection');
 const userRouter = require('./src/routes/userRouter');
-const productRouter = require('./src/routes/productRouter');
 const express = require('express');
 const app = express();
 
@@ -17,7 +16,7 @@ const app = express();
         await databaseConnection.databaseConnection();
         app.use(express.json());
         app.use('/user', userRouter);   
-        app.use('/product', productRouter);
+        app.use('/product', userRouter);
     } catch (error) {
         throw error;
     }
