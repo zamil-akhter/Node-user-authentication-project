@@ -1,14 +1,20 @@
 require('dotenv').config();
 
 const jwt = require('jsonwebtoken');
-const generateToken = async(payload) => {
+const generateUserToken = (user) => {
     try {
-        let token = await jwt.sign(payload, process.env.JWT_SECRET);
-        return token;
+        const payload = {
+            _id : user._id,
+            email : user.email,
+            fullName : user.fullName,
+        }
+        return jwt.sign(payload, process.env.JWT_SECRET);
     } catch (error) {
         console.log('Error while generating the Token', error);
         throw error;
     }
 };
 
-module.exports = generateToken;
+module.exports = {
+    generateUserToken
+};

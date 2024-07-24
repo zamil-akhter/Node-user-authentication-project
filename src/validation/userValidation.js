@@ -2,7 +2,7 @@ const Joi = require('joi');
 
 const userValidation = Joi.object({
   fullName: Joi.string().required(),
-  emailId : Joi.string().email().required(),
+  email : Joi.string().email().required(),
   phoneNumber : Joi.string().regex(/^[0-9]{10,}$/).messages({'string.pattern.base': `Phone number must have 10 digits.`}).required(),
   gender : Joi.string().valid('male','female','other').required(),
   dateOfBirth : Joi.date().required(),
@@ -10,7 +10,7 @@ const userValidation = Joi.object({
 });
 
 const loginValidation = Joi.object({
-  emailId : Joi.string().email().required(),
+  email : Joi.string().email().required(),
   password : Joi.string().min(6).required(),
 })
 

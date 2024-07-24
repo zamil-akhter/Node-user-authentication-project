@@ -1,21 +1,21 @@
 const userSchema = require("../models/userSchema");
-const generateToken = require("../token_manager/generateToken");
+const tokenManager = require("../token_manager/generateToken");
 const commonController = require("./commonController");
 const userQuery = require("../queries/userQuery");
-const sendStatus = require("../utils/responseHandler");
+const responseHandler = require("../utils/responseHandler");
 
 const signup = async (req, res) => {
   try {
-    const existingUser = await commonController.isUserExists(req.body.emailId,req.body.phoneNumber);
+    const existingUser = await commonController.isUserExists(req.body.email,req.body.phoneNumber);
     // console.log("existingUser--------", existingUser);
     if (existingUser) {
-      return res.status(400).json({ message: "User already exists" });
+      return responseHandler.sendErrorStatus(res, 'User already exists');
     }
     const insertedUser = await userQuery.createOneUser(userSchema, req.body);
     const payload = {
       _id: insertedUser._id,
     };
-    let token = await generateToken(payload);
+    let token = tokenManager.generateUserToken(insertedUser);
     console.log("Account has been created");
 
     let update = await userSchema.findOneAndUpdate(
@@ -24,7 +24,17 @@ const signup = async (req, res) => {
       { new:true}
     );
 
-    res.status(200).json(update);
+    let refData = 
+      {
+        id : update._id,
+        email : update.email,
+        phoneNumber : update.phoneNumber,
+        token : update.access_token
+      }
+    
+    console.log(refData);
+    return responseHandler.sendStatus(res, 'Signup Successfull', refData);
+
   } catch (error) {
     console.log("eee", error.message);
     res.status(400).json({ message: "Error while inserting user" });
@@ -33,30 +43,36 @@ const signup = async (req, res) => {
 
 const login = async (req, res) => {
   try {
-    const { emailId, password } = req.body;
-    const existingUser = await commonController.isUserMailExists(emailId);
-    console.log(existingUser);
+    const { email, password } = req.body;
+    const existingUser = await commonController.isUserMailExists(email);
+    // console.log(existingUser);
     if (!existingUser) {
-      return sendStatus(res,400,'Invalid email');
+      return responseHandler.sendErrorStatus(res,'Email does not exists');
     }
 
     if(password != existingUser.password){
-      return sendStatus(res,400, 'Incorrect Password');
-    }
+      return responseHandler.sendErrorStatus(res,'Incorrect Password');
 
-    let payload = {
-      _id : existingUser._id,
     }
-    let token = await generateToken(payload);
+    let token = tokenManager.generateUserToken(existingUser);
     let update = await userSchema.findOneAndUpdate(
       {_id : existingUser._id},
       {access_token : token}
-    )
-    sendStatus(res, 200, 'Login Successfull');
+    );
+    let refData = 
+      {
+        id : update._id,
+        email : update.email,
+        phoneNumber : update.phoneNumber,
+        token : update.access_token
+      }
+    
+    console.log(refData);
+    responseHandler.sendStatus(res, 'Login Successfull', refData);
   } 
   catch (error) {
     console.log("Error", error);
-    return res.status(400).json({'message':'Error while login'})
+    return responseHandler.sendErrorStatus(res, "Error while login")
 
   }
 };

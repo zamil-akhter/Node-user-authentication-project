@@ -1,10 +1,10 @@
 const userSchema = require("../models/userSchema");
 const productSchema = require('../models/productSchema');
 
-const isUserExists = async (newEmailId, newPhoneNumber) => {
+const isUserExists = async (newemail, newPhoneNumber) => {
   try {
     const existingUser = await userSchema.findOne({
-      $or: [{ emailId: newEmailId }, { phoneNumber: newPhoneNumber }],
+      $or: [{ email: newemail }, { phoneNumber: newPhoneNumber }],
     });
     return existingUser;
   } catch (err) {
@@ -12,9 +12,9 @@ const isUserExists = async (newEmailId, newPhoneNumber) => {
   }
 };
 
-const isUserMailExists = async (newEmailId) => {
+const isUserMailExists = async (newemail) => {
   try {
-    const existingUser = await userSchema.findOne({ emailId: newEmailId });
+    const existingUser = await userSchema.findOne({ email: newemail });
     return existingUser;
   } catch (error) {
     throw error
