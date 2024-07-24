@@ -20,5 +20,7 @@ route.post("/signup", validate_request(userValidation.userValidation), userContr
 route.post('/login', validate_request(userValidation.loginValidation), userController.login);
 
 route.post('/save',auth.validateUser, validate_request(userValidation.productValidation), productController.createProduct);
+route.get('/list', auth.validateUser, productController.listProduct)
+
 
 module.exports = route;

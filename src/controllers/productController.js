@@ -1,23 +1,39 @@
-const productSchema = require('../models/productSchema');
-const productQuery = require('../queries/productQuery');
-const commonController = require('../controllers/commonController');
+const productSchema = require("../models/productSchema");
+const productQuery = require("../queries/productQuery");
+const commonController = require("../controllers/commonController");
 
-const createProduct = async(req,res) => {
-    try {
-        // console.log(req.user);
+const createProduct = async (req, res) => {
+  try {
+    // console.log(req.user);
 
-        const existingProductName = await commonController.isProductExists(req.body.productName);
-        console.log(existingProductName);
-        if(existingProductName){
-            return res.status(400).json({"message":"Product name already Exists"});
-        }
-        const newProduct = await productQuery.createOneProduct(productSchema, req.body);
-        res.status(200).json({newProduct});
-    } catch (error) {
-        throw error;
+    console.log("---------", req.user);
+
+    const existingProductName = await commonController.isProductExists(
+      req.body.productName
+    );
+    console.log(existingProductName);
+    if (existingProductName) {
+      return res.status(400).json({ message: "Product name already Exists" });
     }
-}
+    const newProduct = await productQuery.createOneProduct(productSchema, {
+      ...req.body,
+      userId: req.user._id,
+    });
+    res.status(200).json({ newProduct });
+  } catch (error) {
+    throw error;
+  }
+};
+
+const listProduct = async (req, res) => {
+  try {
+    console.log(req.user._id);
+  } catch (error) {
+    throw error;
+  }
+};
 
 module.exports = {
-    createProduct,
-}
+  createProduct,
+  listProduct,
+};
