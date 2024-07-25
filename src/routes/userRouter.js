@@ -28,8 +28,8 @@ const productNameExistance = () => {
     // }
     if (oldProductName != null) {
       let oldPName = oldProductName.productName.toLowerCase();
-      console.log("-------old------>", oldPName);
-      console.log("-------new------>", newProductName);
+      console.log("-------old---->", oldPName);
+      console.log("-------new---->", newProductName);
 
       if (newProductName === oldPName) {
         return res.status(400).json({ message: "Product Name already exists" });
