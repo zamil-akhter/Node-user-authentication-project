@@ -4,7 +4,6 @@ const userRouter = require('./src/routes/userRouter');
 const express = require('express');
 const app = express();
 
-
 (async() => {
     try {
         app.get('/',(req,res)=>{
